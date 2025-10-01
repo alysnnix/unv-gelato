@@ -5,6 +5,6 @@ _tmp_files
 _tmp
 node_modules
 dist
-public
-cloud
+/public
+/cloud
 .env
