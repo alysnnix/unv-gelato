@@ -1,0 +1,7 @@
+{
+  "watch": [
+    "cloud/*.js",
+    "cloud/**/*.js",
+    "cloud/**/**/*.js"
+  ]
+}

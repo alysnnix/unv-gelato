@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "_default": {
+      "link": "unv-gelato"
+    },
+    "unv-gelato": {
+      "applicationId": "qQAH6rpIy7Zn5VaAQcad44p1fEoRvsX0MbZrqXYk"
+    }
+  }
+}

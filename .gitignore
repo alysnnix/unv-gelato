@@ -1,0 +1,10 @@
+.data
+.idea
+data
+_tmp_files
+_tmp
+node_modules
+dist
+public
+cloud
+.env

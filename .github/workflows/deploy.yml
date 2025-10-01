@@ -1,0 +1,50 @@
+name: Build and Deploy
+
+on:
+  push:
+    tags:
+      - "v**"
+      - "!v**-alpha"
+      - "!v**-beta"
+      - "!v**-rc"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Create .env file
+        run: |
+          echo "VITE_PARSE_APP_ID=${{ secrets.VITE_PARSE_APP_ID }}" >> .env
+          echo "VITE_PARSE_JS_KEY=${{ secrets.VITE_PARSE_JS_KEY }}" >> .env
+          echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env
+
+      - name: Build Application (Client + Server)
+        run: bun run build
+
+      - name: Install Back4app CLI
+        run: curl https://raw.githubusercontent.com/back4app/parse-cli/back4app/installer.sh | sudo /bin/bash
+
+      - name: Auth with your Back4app account
+        run: echo ${{ secrets.B4A_ACCOUNT_KEY }} | b4a configure accountkey
+
+      - name: Update applicationId in .parse.local
+        run: |
+          if [ ! -f .parse.local ]; then
+            echo "Error: .parse.local file not found"
+            exit 1
+          fi
+          applicationId=${{ secrets.B4A_APPLICATION_ID }}
+          jq --arg applicationId "$applicationId" '.applications.visualizaai.applicationId = $applicationId' .parse.local > .parse.local.tmp && mv .parse.local.tmp .parse.local
+
+      - name: Deploy to Back4app
+        run: b4a deploy --description "Deploy da tag ${{ github.ref_name }} por ${{ github.actor }}"
