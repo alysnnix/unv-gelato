@@ -139,8 +139,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0(vite@7.1.7(@types/node@24.6.1)(jiti@2.6.0)(lightningcss@1.30.1))
       concurrently:
-        specifier: ^8.2.2
-        version: 8.2.2
+        specifier: ^9.2.1
+        version: 9.2.1
       eslint:
         specifier: ^9.36.0
         version: 9.36.0(jiti@2.6.0)
@@ -258,10 +258,6 @@ packages:
 
   '@babel/runtime@7.27.4':
     resolution: {integrity: sha512-t3yaEOuGu9NlIZ+hIeGbBjFtZT7j2cb2tg0fuaJKeGotchRjjLfrBA9Kwf8quhpP1EUuxModQg04q/mBwyg8uA==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/runtime@7.28.4':
-    resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.27.2':
@@ -2125,9 +2121,9 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  concurrently@8.2.2:
-    resolution: {integrity: sha512-1dP4gpXFhei8IOtlXRE/T/4H88ElHgTiUzh71YUmtjTEHMSRS2Z/fgOxHSxxusGHogsRfxNq1vyAwxSC+EVyDg==}
-    engines: {node: ^14.13.0 || >=16.0.0}
+  concurrently@9.2.1:
+    resolution: {integrity: sha512-fsfrO0MxV64Znoy8/l1vVIjjHa29SZyyqPgQBwhiDcaW8wJc2W3XWVOGx4M3oJBnv/zdUZIIp1gDeS98GzP8Ng==}
+    engines: {node: '>=18'}
     hasBin: true
 
   config-chain@1.1.13:
@@ -2279,10 +2275,6 @@ packages:
   data-uri-to-buffer@4.0.1:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
     engines: {node: '>= 12'}
-
-  date-fns@2.30.0:
-    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
-    engines: {node: '>=0.11'}
 
   dateformat@4.5.1:
     resolution: {integrity: sha512-OD0TZ+B7yP7ZgpJf5K2DIbj3FZvFvxgFUuaqA/V5zTjAtAAXZ1E8bktHxmAGs4x5b7PflqA9LeQ84Og7wYtF7Q==}
@@ -4749,9 +4741,6 @@ packages:
   sparse-bitfield@3.0.3:
     resolution: {integrity: sha512-kvzhi7vqKTfkh0PZU+2D2PIllw2ymqJKujUcyPMd9Y75Nv4nPbGJZXNhxsgdQab2BmlDct1YnfQCguEvHr7VsQ==}
 
-  spawn-command@0.0.2:
-    resolution: {integrity: sha512-zC8zGoGkmc8J9ndvml8Xksr1Amk9qBujgbF0JAIWO7kXr43w0h/0GJNM/Vustixu+YE8N/MTrQ7N31FvHUACxQ==}
-
   spex@3.3.0:
     resolution: {integrity: sha512-VNiXjFp6R4ldPbVRYbpxlD35yRHceecVXlct1J4/X80KuuPnW2AXMq3sGwhnJOhKkUsOxAT6nRGfGE5pocVw5w==}
     engines: {node: '>=10.0.0'}
@@ -5607,8 +5596,6 @@ snapshots:
       regenerator-runtime: 0.13.11
 
   '@babel/runtime@7.27.4': {}
-
-  '@babel/runtime@7.28.4': {}
 
   '@babel/template@7.27.2':
     dependencies:
@@ -7562,14 +7549,11 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  concurrently@8.2.2:
+  concurrently@9.2.1:
     dependencies:
       chalk: 4.1.2
-      date-fns: 2.30.0
-      lodash: 4.17.21
       rxjs: 7.8.2
       shell-quote: 1.8.3
-      spawn-command: 0.0.2
       supports-color: 8.1.1
       tree-kill: 1.2.2
       yargs: 17.7.2
@@ -7734,10 +7718,6 @@ snapshots:
   data-uri-to-buffer@1.2.0: {}
 
   data-uri-to-buffer@4.0.1: {}
-
-  date-fns@2.30.0:
-    dependencies:
-      '@babel/runtime': 7.28.4
 
   dateformat@4.5.1: {}
 
@@ -10686,8 +10666,6 @@ snapshots:
   sparse-bitfield@3.0.3:
     dependencies:
       memory-pager: 1.5.0
-
-  spawn-command@0.0.2: {}
 
   spex@3.3.0: {}
 
