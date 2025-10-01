@@ -6,8 +6,6 @@
  * @returns {string} O sessionToken para o usuário logado.
  */
 
-const axios = require("axios");
-
 Parse.Cloud.define("googleLogin", async (request) => {
   const {id_token} = request.params;
 
@@ -24,12 +22,12 @@ Parse.Cloud.define("googleLogin", async (request) => {
 
   let googleData;
   try {
-    const googleResponse = await axios.get(
-      `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${id_token}`
-    );
-    googleData = googleResponse.data;
+    const httpResponse = await Parse.Cloud.httpRequest({
+      url: `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${id_token}`,
+    });
+    googleData = httpResponse.data;
   } catch (error) {
-    throw error;
+    throw new Error(`Falha ao verificar o token com o Google: ${error.text}`);
   }
 
   if (googleData.aud !== googleClientId) {
