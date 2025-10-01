@@ -27,7 +27,7 @@ Parse.Cloud.define("googleLogin", async (request) => {
     });
     googleData = httpResponse.data;
   } catch (error) {
-    throw new Error(`Falha ao verificar o token com o Google: ${error.text}`);
+    throw error;
   }
 
   if (googleData.aud !== googleClientId) {
