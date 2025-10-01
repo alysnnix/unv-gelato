@@ -27,6 +27,12 @@ jobs:
           echo "VITE_PARSE_APP_ID=${{ secrets.VITE_PARSE_APP_ID }}" >> .env
           echo "VITE_PARSE_JS_KEY=${{ secrets.VITE_PARSE_JS_KEY }}" >> .env
           echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env
+          echo "VITE_CLIENT_URL=${{ secrets.VITE_CLIENT_URL }}" >> .env
+          echo "VITE_CONTACT_PHONE_NUMBER=${{ secrets.VITE_CONTACT_PHONE_NUMBER }}" >> .env
+          echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}" >> .env
+          echo "VITE_B4A_APPLICATION_ID=${{ secrets.VITE_B4A_APPLICATION_ID }}" >> .env
+          echo "VITE_B4A_JAVASCRIPT_KEY=${{ secrets.VITE_B4A_JAVASCRIPT_KEY }}" >> .env
+          echo "VITE_B4A_HOST_URL=https://parseapi.back4app.com/" >> .env
 
       - name: Build Application (Client + Server)
         run: bun run build
