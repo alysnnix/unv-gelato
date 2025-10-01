@@ -127,8 +127,8 @@ importers:
         specifier: ^9.36.0
         version: 9.36.0
       '@types/parse':
-        specifier: ^3.0.9
-        version: 3.0.9
+        specifier: ^6.1.0
+        version: 6.1.0
       '@types/react':
         specifier: ^19.1.13
         version: 19.1.16
@@ -1541,8 +1541,9 @@ packages:
   '@types/node@24.6.1':
     resolution: {integrity: sha512-ljvjjs3DNXummeIaooB4cLBKg2U6SPI6Hjra/9rRIy7CpM0HpLtG9HptkMKAb4HYWy5S7HUvJEuWgr/y0U8SHw==}
 
-  '@types/parse@3.0.9':
-    resolution: {integrity: sha512-DGTHygc7krgmNAK8h42giwmAofCd9uv2++RD+zw6OmWI7AEnlTYZwEuWsx22SA2CSMQrZW8P2INHLpQbnQFUng==}
+  '@types/parse@6.1.0':
+    resolution: {integrity: sha512-V+pWo90wFJhD8FR+Qxt8zfB3lK1QWezVT0EyIcD9YModdifp8hXRH/gb63zZuKnxc+exp+ZLZp87zvEa6YTsHA==}
+    deprecated: This is a stub types definition. parse provides its own type definitions, so you do not need this installed.
 
   '@types/qs@6.14.0':
     resolution: {integrity: sha512-eOunJqu0K1923aExK6y8p6fsihYEn/BYuQ4g0CxAAgFc4b/ZLN4CrsRZ55srTdqoiLzU2B2evC+apEIxprEzkQ==}
@@ -6894,9 +6895,12 @@ snapshots:
     dependencies:
       undici-types: 7.13.0
 
-  '@types/parse@3.0.9':
+  '@types/parse@6.1.0':
     dependencies:
-      '@types/node': 24.6.1
+      parse: 6.1.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   '@types/qs@6.14.0': {}
 
