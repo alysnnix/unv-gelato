@@ -22,10 +22,14 @@ Parse.Cloud.define("googleLogin", async (request) => {
 
   let googleData;
   try {
-    const httpResponse = await Parse.Cloud.httpRequest({
-      url: `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${id_token}`,
-    });
-    googleData = httpResponse.data;
+    const response = await fetch(
+      `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${id_token}`
+    );
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Erro na API do Google: ${response.status} ${errorText}`);
+    }
+    googleData = await response.json();
   } catch (error) {
     throw error;
   }
@@ -56,17 +60,18 @@ Parse.Cloud.define("googleLogin", async (request) => {
     user = new Parse.User();
     user.set("username", email);
     user.set("email", email);
-    user.set("password", Math.random().toString(36).slice(-16));
   }
+
+  // Gera uma nova senha aleatória para cada login social
+  const password = Math.random().toString(36).slice(-16);
+  user.set("password", password);
 
   user.set("fullName", name);
   user.set("picture", picture);
 
   await user.save(null, {useMasterKey: true});
 
-  const loggedInUser = await Parse.User.logIn(
-    user.get("username"),
-    user.get("password")
-  );
+  // Faz o login com a senha que acabamos de gerar para obter um token de sessão
+  const loggedInUser = await Parse.User.logIn(email, password);
   return loggedInUser.getSessionToken();
 });
