@@ -16,11 +16,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
 
       - name: Install dependencies
-        run: bun install
+        run: pnpm install --frozen-lockfile
 
       - name: Create .env file
         run: |
@@ -35,7 +43,7 @@ jobs:
           echo "VITE_B4A_HOST_URL=https://parseapi.back4app.com/" >> .env
 
       - name: Build Application (Client + Server)
-        run: bun run build
+        run: pnpm run build
 
       - name: Install Back4app CLI
         run: curl https://raw.githubusercontent.com/back4app/parse-cli/back4app/installer.sh | sudo /bin/bash
