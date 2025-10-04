@@ -10,8 +10,8 @@ const Playground = () => {
 
 export const Home = () => {
   return (
-    <SessionContext.Provider>
+    <>
       <Playground />
-    </SessionContext.Provider>
+    </>
   );
 };
