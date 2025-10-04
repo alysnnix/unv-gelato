@@ -17,7 +17,7 @@ export const sessionMachine = createMachine(
       products: [],
       companies: [],
       categories: [],
-    },
+    } as SessionContext,
     states: {
       initializing: {
         invoke: {

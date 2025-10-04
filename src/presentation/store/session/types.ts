@@ -1,6 +1,22 @@
 export interface User {
-  id: string;
-  name: string;
+  __type: string;
+  ACL: Acl;
+  email: string;
+  picture: string;
+  username: string;
+  objectId: string;
+  fullName: string;
+  createdAt: string;
+  updatedAt: string;
+  className: string;
+  sessionToken: string;
+}
+
+interface Acl {
+  [objectId: string]: {
+    read: boolean;
+    write: boolean;
+  };
 }
 
 export interface Company {

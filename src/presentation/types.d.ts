@@ -1,18 +1,14 @@
 export declare global {
   interface Window {
-    google: {
+    google?: {
       accounts: {
         id: {
-          initialize: (options: {
-            client_id: string;
-            callback?: (response: any) => void;
-            auto_select?: boolean;
-            use_fedcm_for_prompt?: boolean;
-            itp_support?: boolean;
-          }) => void;
-          prompt: () => void;
+          initialize: (config: any) => void;
+          prompt: (momentListener?: (notification: any) => void) => void;
+          cancel: () => void;
         };
       };
     };
+    __googleOneTapInitialized?: boolean;
   }
 }

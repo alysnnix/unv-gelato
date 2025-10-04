@@ -1,20 +1,5 @@
 import {useEffect, useRef} from "react";
 
-declare global {
-  interface Window {
-    google?: {
-      accounts: {
-        id: {
-          initialize: (config: any) => void;
-          prompt: (momentListener?: (notification: any) => void) => void;
-          cancel: () => void;
-        };
-      };
-    };
-    __googleOneTapInitialized?: boolean;
-  }
-}
-
 export const useGoogleOneTap = (
   clientId: string,
   onSuccess: (credential: string) => void,
@@ -71,7 +56,6 @@ export const useGoogleOneTap = (
             }
           },
           auto_select: shouldAutoLogin,
-          // Tenta usar FedCM, mas com fallback automático
           use_fedcm_for_prompt: true,
           itp_support: true,
         });
@@ -88,7 +72,6 @@ export const useGoogleOneTap = (
             } else if (momentType === "dismissed") {
               console.warn("One Tap foi fechado pelo usuário");
 
-              // Se foi fechado devido ao FedCM, sugere ao usuário
               if (dismissedReason === "fedcm_disabled") {
                 console.info(
                   "FedCM está desabilitado. Clique no ícone à esquerda da barra de URL para gerenciar o login de terceiros."
@@ -97,7 +80,6 @@ export const useGoogleOneTap = (
             } else {
               console.error("One Tap não foi exibido:", dismissedReason);
 
-              // Lista de razões possíveis
               if (dismissedReason === "opt_out_or_no_session") {
                 console.info(
                   "Usuário optou por não usar ou não tem sessão ativa"
