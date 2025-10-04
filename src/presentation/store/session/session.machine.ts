@@ -102,7 +102,7 @@ export const sessionMachine = createMachine(
   {
     actions: {},
     guards: {
-      hasOfflineData: ({context, event}) =>
+      hasOfflineData: ({event}) =>
         event.output !== null && event.output !== undefined,
     },
     actors: {
