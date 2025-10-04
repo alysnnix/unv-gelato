@@ -11,6 +11,15 @@ export default defineConfig({
   build: {
     outDir: "../../dist/presentation",
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "react-vendor": ["react", "react-dom", "react-router"],
+          "state-vendor": ["xstate", "@xstate/react", "dexie"],
+          "db-vendor": ["parse"],
+        },
+      },
+    },
   },
   resolve: {
     alias: {
