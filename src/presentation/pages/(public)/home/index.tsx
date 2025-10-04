@@ -1,6 +1,6 @@
 import type {FC} from "react";
-import {AppParse} from "@/services/app-parse";
 import useGoogleOneTap from "@/hooks/useGoogleOneTap";
+import { AppParse } from "@/services/app-parse";
 
 export const Home: FC = () => {
   useGoogleOneTap(import.meta.env.VITE_GOOGLE_CLIENT_ID, true, false);
