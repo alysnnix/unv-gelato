@@ -1,8 +1,8 @@
 import Dexie, {type Table} from "dexie";
-import {type Session} from "@/store/session/session.types";
+import {SessionContext} from "@/store/session/types";
 
 export class SessionDB extends Dexie {
-  session!: Table<Session>;
+  session!: Table<SessionContext>;
 
   constructor() {
     super("unv-gelato");
