@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
 @theme {
+  --breakpoint-xs: 325px;
+
+  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+
   --color-ui-background: light-dark(#fefefe, #242424);
   --color-ui-foreground: light-dark(#1b1c1c, #fefefe);
-
   --color-ui-borders: light-dark(#dadce0, #3c4043);
-
   --color-ui-accents: light-dark(#6200ee, #bb86fc);
   --color-ui-accents-hover: light-dark(#3700b3, #3700b3);
-
   --color-ui-texts: light-dark(#3c4043, #e8eaed);
   --color-ui-texts-secondary: light-dark(#5f6368, #bdc1c6);
 }
@@ -20,7 +22,7 @@
 
   color-scheme: light dark;
   color: var(--color-ui-texts);
-  background: var(--color-ui-background);
+  /* background: var(--color-ui-background); */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -33,7 +35,6 @@ html,
 #root {
   width: 100%;
   height: 100%;
-  transition: 100ms ease all;
   box-sizing: border-box;
   scroll-behavior: smooth;
 
@@ -49,7 +50,13 @@ html,
   display: none;
 }
 
-* {
+*,
+::after,
+::before,
+::backdrop,
+::file-selector-button {
+  margin: 0;
+  padding: 0;
   transition: 150ms ease all;
 }
 

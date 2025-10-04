@@ -72,7 +72,8 @@ export const sessionMachine = createMachine(
             onDone: "persisting",
           },
           persisting: {
-            entry: () => console.log("Entering persisting state..."),
+            entry: () =>
+              console.info("[SESSION_MACHINE] Entering persisting state..."),
             invoke: {
               src: "persistData",
               input: ({context}) => ({context}),
@@ -85,7 +86,7 @@ export const sessionMachine = createMachine(
             },
           },
           ready: {
-            entry: () => console.log("Session is ready."),
+            entry: () => console.info("[SESSION_MACHINE] Session is ready."),
             type: "final",
           },
           failure: {
@@ -106,7 +107,15 @@ export const sessionMachine = createMachine(
   {
     actions: {
       clearOfflineData: assign(() => {
+        console.info("[SESSION_MACHINE] Clearing offline data...");
         db.session.clear();
+        localStorage.clear();
+        document.cookie.split(";").forEach((cookie) => {
+          const eqPos = cookie.indexOf("=");
+          const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+          document.cookie =
+            name.trim() + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        });
         return {
           user: null,
           companies: [],
