@@ -1,9 +1,12 @@
 import {AppParse} from "@/services/app-parse";
 import {useGoogleOneTap} from "@/hooks/useGoogleOneTap";
 import {useSession, useSessionSelector} from "@/store/session";
-import {FC} from "react";
+import {FC, useEffect} from "react";
+import {useNavigate} from "react-router";
 
 export const Home: FC = () => {
+  const navigate = useNavigate();
+
   const session = useSession();
   const user = useSessionSelector((state) => state.context.user);
   const isAuthenticated = useSessionSelector((state) =>
@@ -18,8 +21,10 @@ export const Home: FC = () => {
       const sessionToken = await AppParse.Cloud.run("googleLogin", {id_token});
       const loggedUser = await AppParse.User.become(sessionToken);
       session.send({type: "LOGIN_SUCCESS", user: loggedUser});
+      navigate("/dash");
     } catch (error) {
       console.error("Error during Google login:", error);
+      session.send({type: "LOGOUT"});
     }
   };
 
@@ -43,12 +48,6 @@ export const Home: FC = () => {
       session.send({type: "LOGOUT"});
     }
   };
-
-  console.log({
-    objectId: user?.id,
-    acl: user?.get("ACL"),
-    updatedAt: user?.updatedAt,
-  });
 
   return (
     <div className="flex items-center justify-center h-screen flex-col gap-4">
