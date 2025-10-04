@@ -53,7 +53,13 @@ export const Home: FC = () => {
   return (
     <div className="flex items-center justify-center h-screen flex-col gap-4">
       <h1 className="text-4xl font-bold">Home page</h1>
-      <button onClick={getCurrentUser}>Go to Dashboard</button>
+      <button
+        style={{
+          backgroundColor: "var(--color-ui-foreground)",
+        }}
+        onClick={getCurrentUser}>
+        Go to Dashboard
+      </button>
 
       {user && (
         <div className="group overflow-hidden flex items-center justify-center bg-black/30 p-3 rounded-full cursor-pointer active:scale-90">
