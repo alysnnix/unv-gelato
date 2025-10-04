@@ -2,7 +2,7 @@ import {api} from "@/services/api";
 import {db} from "@/services/indexedDB";
 import {createMachine, assign, fromPromise} from "xstate";
 
-import {SessionContext} from "./types";
+import {type SessionContext} from "./types";
 
 export const sessionMachine = createMachine(
   {
@@ -49,7 +49,6 @@ export const sessionMachine = createMachine(
               {id: "fetchProducts", src: "fetchProducts"},
               {id: "fetchCategories", src: "fetchCategories"},
             ],
-            onDone: "persisting",
             on: {
               "done.invoke.fetchCompanies": {
                 actions: assign({
@@ -67,10 +66,12 @@ export const sessionMachine = createMachine(
                 }),
               },
             },
+            onDone: "persisting",
           },
           persisting: {
             invoke: {
               src: "persistData",
+              input: ({context}) => ({context}),
               onDone: "ready",
               onError: "ready",
             },
@@ -87,20 +88,25 @@ export const sessionMachine = createMachine(
         on: {
           LOGOUT: {
             target: "unauthenticated",
-            actions: assign((context) => ({
-              user: null,
-              companies: [],
-              products: [],
-              categories: [],
-              error: null,
-            })),
+            actions: "clearOfflineData",
           },
         },
       },
     },
   },
   {
-    actions: {},
+    actions: {
+      clearOfflineData: assign(() => {
+        db.session.clear();
+        return {
+          user: null,
+          companies: [],
+          products: [],
+          categories: [],
+          error: null,
+        };
+      }),
+    },
     guards: {
       hasOfflineData: ({event}) =>
         event.output !== null && event.output !== undefined,
@@ -115,14 +121,14 @@ export const sessionMachine = createMachine(
       fetchCategories: fromPromise(async ({input}: {input: SessionContext}) => {
         return await api.fetchCategories(input.user!.id);
       }),
-      persistData: fromPromise(async ({input}: {input: SessionContext}) => {
-        await db.saveUserData({
-          companies: input.companies,
-          products: input.products,
-          categories: input.categories,
-        });
+      persistData: fromPromise(async ({input}: {input: {context: SessionContext}}) => {
+        const {context} = input;
+        await db.session.put(context);
       }),
-      loadOfflineData: fromPromise(async () => await db.loadUserData()),
+      loadOfflineData: fromPromise(async () => {
+        const session = await db.session.toCollection().last();
+        return session;
+      }),
     },
   }
 );

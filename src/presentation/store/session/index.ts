@@ -1,10 +1,9 @@
-import { createActorContext } from '@xstate/react';
-import { sessionMachine } from './machine';
+import {createActorContext} from "@xstate/react";
+import {sessionMachine} from "./machine";
 
 export const SessionContext = createActorContext(sessionMachine);
 
-export const SessionProvider = SessionContext.Provider;
 export const useSession = SessionContext.useActorRef;
 export const useSessionSelector = SessionContext.useSelector;
 
-export * from './types';
+export * from "./types";

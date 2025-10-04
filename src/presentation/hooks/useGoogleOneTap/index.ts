@@ -1,39 +1,31 @@
-import { AppParse } from "@/services/app-parse";
+import {AppParse} from "@/services/app-parse";
 import {useEffect} from "react";
 
-const loginNoBack4AppComGoogle = async (googleResponse: {
+const loginWithGoogleOnBack4App = async (googleResponse: {
   credential?: string;
 }) => {
   const id_token = googleResponse.credential;
 
   if (!id_token) {
-    console.error("ID Token do Google não encontrado.");
+    console.error("Google ID Token not found.");
     return;
   }
 
   try {
-    // Passo 1: Chamar a função de Cloud Code que criamos
     const sessionToken = await AppParse.Cloud.run("googleLogin", {id_token});
-
-    // Passo 2: Fazer o login no cliente com o session token retornado pelo servidor
     const user = await AppParse.User.become(sessionToken);
+    console.log("User logged in successfully via Cloud Code!", user);
+    const profilePicture = user.get("picture");
 
-    console.log("Usuário logado com sucesso via Cloud Code!", user);
-
-    const fotoDoPerfil = user.get("picture");
-
-    if (fotoDoPerfil) {
-      console.log("URL da foto de perfil:", fotoDoPerfil);
+    if (profilePicture) {
+      console.log("Profile picture URL:", profilePicture);
     } else {
-      console.log("URL da foto não foi encontrada.");
+      console.log("Picture URL not found.");
     }
 
     return user;
   } catch (error) {
-    console.error(
-      'Erro ao fazer login com a função de Cloud "googleLogin":',
-      error
-    );
+    console.error('Error logging in with Cloud function "googleLogin":', error);
   }
 };
 
@@ -51,7 +43,7 @@ const useGoogleOneTap = (
       if (window.google) {
         window.google.accounts.id.initialize({
           client_id: clientId,
-          callback: loginNoBack4AppComGoogle,
+          callback: loginWithGoogleOnBack4App,
           auto_select: shouldAutoLogin,
           use_fedcm_for_prompt: true,
           itp_support: true,
