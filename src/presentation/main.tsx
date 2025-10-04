@@ -2,7 +2,7 @@ import "./style.css";
 
 import {lazy, StrictMode, Suspense} from "react";
 import {createRoot} from "react-dom/client";
-import {GlobalProviders} from "./providers/global.tsx";
+import {GlobalProviders} from "./providers/global";
 
 const AppRoutes = lazy(() =>
   import("./router").then((mod) => ({default: mod.AppRoutes}))

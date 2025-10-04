@@ -1,73 +1,115 @@
-import {useEffect} from "react";
-import {AppParse} from "../../service/app-parse";
+import {useEffect, useRef} from "react";
 
-const loginNoBack4AppComGoogle = async (googleResponse: {
-  credential?: string;
-}) => {
-  const id_token = googleResponse.credential;
+export const useGoogleOneTap = (
+  clientId: string,
+  onSuccess: (credential: string) => void,
+  shouldPrompt = true,
+  shouldAutoLogin = false
+) => {
+  const onSuccessRef = useRef(onSuccess);
 
-  if (!id_token) {
-    console.error("ID Token do Google não encontrado.");
-    return;
-  }
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+  }, [onSuccess]);
 
-  try {
-    // Passo 1: Chamar a função de Cloud Code que criamos
-    const sessionToken = await AppParse.Cloud.run("googleLogin", {id_token});
-
-    // Passo 2: Fazer o login no cliente com o session token retornado pelo servidor
-    const user = await AppParse.User.become(sessionToken);
-
-    console.log("Usuário logado com sucesso via Cloud Code!", user);
-
-    const fotoDoPerfil = user.get("picture");
-
-    if (fotoDoPerfil) {
-      console.log("URL da foto de perfil:", fotoDoPerfil);
-    } else {
-      console.log("URL da foto não foi encontrada.");
+  useEffect(() => {
+    if (window.__googleOneTapInitialized) {
+      return;
     }
 
-    return user;
-  } catch (error) {
-    console.error(
-      'Erro ao fazer login com a função de Cloud "googleLogin":',
-      error
+    const existingScript = document.querySelector(
+      'script[src="https://accounts.google.com/gsi/client"]'
     );
-  }
-};
 
-const useGoogleOneTap = (
-  clientId: string,
-  shouldPrompt: boolean,
-  shouldAutoLogin: boolean
-) => {
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.onload = () => {
-      if (!window) return;
-      if (window.google) {
+    if (existingScript && window.google?.accounts?.id) {
+      initializeGoogleOneTap();
+      return;
+    }
+
+    if (!existingScript) {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+
+      script.onload = () => {
+        initializeGoogleOneTap();
+      };
+
+      script.onerror = () => {
+        console.error("Google One Tap script failed to load.");
+        window.__googleOneTapInitialized = false;
+      };
+
+      document.body.appendChild(script);
+    }
+
+    function initializeGoogleOneTap() {
+      if (window.google?.accounts?.id && !window.__googleOneTapInitialized) {
+        window.__googleOneTapInitialized = true;
+
         window.google.accounts.id.initialize({
           client_id: clientId,
-          callback: loginNoBack4AppComGoogle,
+          callback: (response: any) => {
+            if (response.credential) {
+              onSuccessRef.current(response.credential);
+            }
+          },
           auto_select: shouldAutoLogin,
           use_fedcm_for_prompt: true,
           itp_support: true,
         });
-        window.google.accounts.id.prompt();
+
+        if (shouldPrompt) {
+          window.google.accounts.id.prompt((notification: any) => {
+            const momentType = notification.getMomentType();
+            const dismissedReason = notification.getDismissedReason();
+
+            if (momentType === "display") {
+              console.log("One Tap exibido com sucesso");
+            } else if (momentType === "skipped") {
+              console.warn("One Tap foi ignorado pelo usuário");
+            } else if (momentType === "dismissed") {
+              console.warn("One Tap foi fechado pelo usuário");
+
+              if (dismissedReason === "fedcm_disabled") {
+                console.info(
+                  "FedCM está desabilitado. Clique no ícone à esquerda da barra de URL para gerenciar o login de terceiros."
+                );
+              }
+            } else {
+              console.error("One Tap não foi exibido:", dismissedReason);
+
+              if (dismissedReason === "opt_out_or_no_session") {
+                console.info(
+                  "Usuário optou por não usar ou não tem sessão ativa"
+                );
+              } else if (dismissedReason === "secure_http_required") {
+                console.error("HTTPS é necessário para One Tap");
+              } else if (dismissedReason === "suppressed_by_user") {
+                console.info(
+                  "One Tap foi suprimido pelo usuário anteriormente"
+                );
+              } else if (dismissedReason === "credential_returned") {
+                console.info("Credencial já foi retornada");
+              } else if (dismissedReason === "fedcm_disabled") {
+                console.warn(
+                  "⚠️ FedCM desabilitado. Para habilitar:\n" +
+                    "1. Clique no ícone 🔒 ou ⓘ à esquerda da URL\n" +
+                    "2. Vá em 'Configurações do site'\n" +
+                    "3. Habilite 'Login de terceiros'"
+                );
+              }
+            }
+          });
+        }
+      }
+    }
+
+    return () => {
+      if (window.google?.accounts?.id) {
+        window.google.accounts.id.cancel();
       }
     };
-    script.onerror = () => {
-      console.error("Google One Tap script failed to load.");
-    };
-
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, [clientId, shouldPrompt]);
+  }, [clientId, shouldPrompt, shouldAutoLogin]);
 };
-
-export default useGoogleOneTap;

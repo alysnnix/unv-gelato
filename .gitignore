@@ -8,3 +8,4 @@ dist
 /public
 /cloud
 .env
+/logs
