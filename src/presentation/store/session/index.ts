@@ -3,6 +3,7 @@ import {sessionMachine} from "./machine";
 
 export const SessionContext = createActorContext(sessionMachine);
 
+export const SessionProvider = SessionContext.Provider;
 export const useSession = SessionContext.useActorRef;
 export const useSessionSelector = SessionContext.useSelector;
 

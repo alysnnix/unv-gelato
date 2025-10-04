@@ -1,13 +1,13 @@
-import {SessionContext} from "@/store/session/types";
 import Dexie, {type Table} from "dexie";
+import {type Session} from "@/store/session/session.types";
 
 export class SessionDB extends Dexie {
-  session!: Table<SessionContext>;
+  session!: Table<Session>;
 
   constructor() {
     super("unv-gelato");
     this.version(1).stores({
-      session: "++id, user, token",
+      session: "id, user, token",
     });
   }
 }

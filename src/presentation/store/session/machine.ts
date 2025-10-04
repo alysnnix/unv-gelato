@@ -1,8 +1,11 @@
 import {api} from "@/services/api";
 import {db} from "@/services/indexedDB";
+import {AppParse} from "@/services/app-parse";
 import {createMachine, assign, fromPromise} from "xstate";
 
 import {type SessionContext} from "./types";
+
+const SESSION_DB_ID = 1;
 
 export const sessionMachine = createMachine(
   {
@@ -69,15 +72,21 @@ export const sessionMachine = createMachine(
             onDone: "persisting",
           },
           persisting: {
+            entry: () => console.log("Entering persisting state..."),
             invoke: {
               src: "persistData",
               input: ({context}) => ({context}),
               onDone: "ready",
-              onError: "ready",
+              onError: {
+                target: "ready",
+                actions: ({event}) =>
+                  console.error("Failed to persist data:", event.actorId),
+              },
             },
           },
           ready: {
-            // O estado final, tudo pronto para uso
+            entry: () => console.log("Session is ready."),
+            type: "final",
           },
           failure: {
             on: {
@@ -121,13 +130,30 @@ export const sessionMachine = createMachine(
       fetchCategories: fromPromise(async ({input}: {input: SessionContext}) => {
         return await api.fetchCategories(input.user!.id);
       }),
-      persistData: fromPromise(async ({input}: {input: {context: SessionContext}}) => {
-        const {context} = input;
-        await db.session.put(context);
-      }),
+      persistData: fromPromise(
+        async ({input}: {input: {context: SessionContext}}) => {
+          console.log("Persisting data to IndexedDB...");
+          const {context} = input;
+          if (!context.user) return;
+
+          const serializableContext = {
+            ...context,
+            user: context.user,
+            id: SESSION_DB_ID,
+          };
+          console.log("Data to save:", serializableContext);
+          await db.session.put(serializableContext);
+        }
+      ),
       loadOfflineData: fromPromise(async () => {
-        const session = await db.session.toCollection().last();
-        return session;
+        console.log("Loading offline data...");
+        const session = await db.session.get(SESSION_DB_ID);
+        console.log("Loaded data:", session);
+        if (session && session.user) {
+          const user = new AppParse.User(session.user);
+          return {...session, user};
+        }
+        return undefined;
       }),
     },
   }
