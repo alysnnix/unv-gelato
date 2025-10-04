@@ -122,13 +122,13 @@ export const sessionMachine = createMachine(
     },
     actors: {
       fetchCompanies: fromPromise(async ({input}: {input: SessionContext}) => {
-        return await api.fetchCompanies(input.user!.id);
+        return await api.fetchCompanies(input?.user!.id);
       }),
       fetchProducts: fromPromise(async ({input}: {input: SessionContext}) => {
-        return await api.fetchProducts(input.user!.id);
+        return await api.fetchProducts(input?.user!.id);
       }),
       fetchCategories: fromPromise(async ({input}: {input: SessionContext}) => {
-        return await api.fetchCategories(input.user!.id);
+        return await api.fetchCategories(input?.user!.id);
       }),
       persistData: fromPromise(
         async ({input}: {input: {context: SessionContext}}) => {

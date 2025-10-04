@@ -1,13 +1,17 @@
 export interface User {
   __type: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+  get<K extends keyof BaseUser>(key: K): BaseUser[K] | undefined;
+}
+
+interface BaseUser {
   ACL: Acl;
   email: string;
   picture: string;
   username: string;
-  objectId: string;
   fullName: string;
-  createdAt: string;
-  updatedAt: string;
   className: string;
   sessionToken: string;
 }
