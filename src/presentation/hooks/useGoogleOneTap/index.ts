@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {AppParse} from "../../service/app-parse";
+import {AppParse} from "../../services/app-parse";
 
 const loginNoBack4AppComGoogle = async (googleResponse: {
   credential?: string;

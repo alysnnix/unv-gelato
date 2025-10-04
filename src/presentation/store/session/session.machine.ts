@@ -1,6 +1,7 @@
+import {api} from "@/services/api";
+import {db} from "@/services/indexedDB";
 import {createMachine, assign, fromPromise} from "xstate";
-import {api} from "../../services/api";
-import {db} from "../../services/indexedDB";
+
 import {SessionContext} from "./session.types";
 
 export const sessionMachine = createMachine(

@@ -1,3 +1,4 @@
+// @ts-ignore
 import Parse from "parse/dist/parse.min";
 
 const PARSE_HOST_URL = import.meta.env.VITE_B4A_HOST_URL;

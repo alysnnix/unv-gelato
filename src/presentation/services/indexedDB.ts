@@ -1,4 +1,4 @@
-import {SessionContext} from "../store/session/session.types";
+import {SessionContext} from "@/store/session/session.types";
 
 export const db = {
   saveUserData: async (data: Omit<SessionContext, "user" | "error">) => {

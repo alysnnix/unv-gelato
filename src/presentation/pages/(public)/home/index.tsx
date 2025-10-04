@@ -1,9 +1,9 @@
 import type {FC} from "react";
-import useGoogleOneTap from "../../../hooks/useGoogleOneTap";
-import {AppParse} from "../../../service/app-parse";
+import {AppParse} from "@/services/app-parse";
+import useGoogleOneTap from "@/hooks/useGoogleOneTap";
 
 export const Home: FC = () => {
-  // useGoogleOneTap(import.meta.env.VITE_GOOGLE_CLIENT_ID, true, false);
+  useGoogleOneTap(import.meta.env.VITE_GOOGLE_CLIENT_ID, true, false);
   const user = AppParse.User.current();
   console.log("current user:", user);
 
