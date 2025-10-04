@@ -1,7 +1,7 @@
 import {createMachine, assign, fromPromise} from "xstate";
-import {SessionContext} from "./session.types";
 import {api} from "../../services/api";
 import {db} from "../../services/indexedDB";
+import {SessionContext} from "./session.types";
 
 export const sessionMachine = createMachine(
   {
@@ -9,10 +9,10 @@ export const sessionMachine = createMachine(
     initial: "initializing",
     context: {
       user: null,
-      companies: [],
-      products: [],
-      categories: [],
       error: null,
+      products: [],
+      companies: [],
+      categories: [],
     },
     states: {
       initializing: {
