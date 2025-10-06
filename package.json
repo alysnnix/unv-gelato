@@ -18,7 +18,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
     "@xstate/react": "^6.0.0",
-    "dexie": "^4.2.0",
+    "dexie": "^4.2.1",
     "firebase": "^12.3.0",
     "parse": "^6.1.1",
     "react": "^19.1.1",
